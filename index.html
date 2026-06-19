@@ -540,6 +540,7 @@ var state={
  authed:false,
  user:null,
  isAdmin:false,
+ authErr:'',
  adminView:'catalogue',
  editId:null,
  search:'',
@@ -747,7 +748,7 @@ function simControlsHTML(){
 /* ========================= RENDER: ADMIN ========================= */
 function adminHTML(){
  if(!state.authed)return loginHTML();
- if(FB_MODE&&!state.isAdmin)return notAdminHTML();
+ if(window.FB&&window.FB.enabled&&!state.isAdmin)return notAdminHTML();
  return '<div class="adm"><div class="adm-wrap">'
  +'<div class="adm-bar"><h1>Admin Panel</h1><span class="pill">Content management</span>'
  +'<div class="adm-tabs">'
@@ -763,7 +764,9 @@ function loginHTML(){
  +'<div class="lic">'+ic('shield')+'</div><h2>Admin sign in</h2><p>Manage and publish the simulation catalogue.</p>'
  +(live
    ?'<button class="btn solid" style="width:100%;justify-content:center" data-action="google-login">'+ic('cap')+' Sign in with Google</button>'
+     +(state.authErr?'<div class="hint" style="color:#dc2626;font-weight:600">Sign-in error: '+esc(state.authErr)+'</div>':'')
      +'<div class="hint">Only approved admin accounts can manage content. Everyone else stays in the student app.</div>'
+     +'<div class="hint" style="opacity:.7">Opened from: '+esc(location.origin||location.href)+'</div>'
    :'<button class="btn solid" style="width:100%;justify-content:center" data-action="demo-login">'+ic('logout')+' Continue (demo)</button>'
      +'<div class="hint">Demo build \u2014 Firebase not configured yet, so changes stay in this browser only.</div>')
  +'</div></div></div>';
@@ -913,7 +916,7 @@ document.addEventListener('click',function(e){
   case 'sim-color':state.sim.color=el.getAttribute('data-color');state.sim.colorPop=false;rerenderStudentStage();break;
   case 'sim-reset':state.sim={angle:45,color:'#ffe600',incident:true,reflected:true,normal:true,angles:true,protractor:false,colorPop:false};rerenderStudentStage();break;
   /* admin */
-  case 'google-login':{if(window.FB&&window.FB.enabled){window.FB.signInGoogle().catch(function(e){toast('Sign-in failed: '+(e&&e.code||e));});}break;}
+  case 'google-login':{state.authErr='';if(window.FB&&window.FB.enabled){window.FB.signInGoogle();}render();break;}
   case 'demo-login':{state.authed=true;state.isAdmin=true;state.adminView='catalogue';render();toast('Signed in (demo)');break;}
   case 'admin-logout':{if(window.FB&&window.FB.enabled){window.FB.signOutUser();}state.authed=false;state.user=null;state.isAdmin=false;state.menuOpen=false;render();break;}
   case 'admin-nav':{var v=el.getAttribute('data-view');state.adminView=v;if(v==='add'){state.editId=null;state.form=blankForm();}render();break;}
@@ -1012,6 +1015,7 @@ window.__onCatalogue=function(arr){
   render();
 };
 window.__fbToast=function(m){try{toast(m);}catch(e){}};
+window.__authError=function(code){state.authErr=String(code||'unknown');render();};
 
 render();
 </script>
@@ -1027,7 +1031,7 @@ render();
 ====================================================================== -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signOut, onAuthStateChanged }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import { getFirestore, collection, query, where, onSnapshot, doc, getDoc, setDoc, updateDoc, deleteDoc, serverTimestamp }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
@@ -1042,6 +1046,7 @@ const firebaseConfig = {
   appId: "1:605711062810:web:b0405877ac7411ab017ea3",
   measurementId: "G-RRLT2DXX48"
 };
+
 const configured = !String(firebaseConfig.apiKey).startsWith("PASTE");
 window.FB = { enabled: configured };
 
@@ -1084,7 +1089,22 @@ if (!configured) {
   // start a read-only (live-only) subscription immediately for signed-out students
   subscribe(false);
 
-  window.FB.signInGoogle = () => signInWithPopup(auth, provider);
+  window.FB.signInGoogle = async () => {
+    try {
+      await signInWithPopup(auth, provider);
+    } catch (e) {
+      console.error("Google sign-in (popup) failed:", e);
+      const code = (e && e.code) || String(e);
+      // Popup blocked or unsupported environment -> try full-page redirect
+      if (code === "auth/popup-blocked" || code === "auth/cancelled-popup-request" || code === "auth/operation-not-supported-in-this-environment") {
+        try { await signInWithRedirect(auth, provider); return; }
+        catch (e2) { window.__authError((e2 && e2.code) || String(e2)); return; }
+      }
+      window.__authError(code);
+    }
+  };
+  // Complete any redirect-based sign-in and surface its errors
+  getRedirectResult(auth).catch((e) => { console.error("Redirect result error:", e); window.__authError((e && e.code) || String(e)); });
   window.FB.signOutUser  = () => signOut(auth);
 
   window.FB.saveSim = async (rec, editId) => {
