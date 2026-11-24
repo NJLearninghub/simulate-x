@@ -253,7 +253,7 @@ export default function RectifierSimulation() {
             <div className="space-y-3">
               <div className="flex justify-between">
                 <label className="text-sm font-medium text-slate-400">Filter Capacitor (C)</label>
-                <span className="text-sm text-indigo-400 font-mono">{capacitance} µF</span>
+                <span className="text-sm text-indigo-400 font-mono">{capacitance} (scaled)</span>
               </div>
               <input 
                 type="range" min="0" max="100" value={capacitance} 
@@ -422,11 +422,12 @@ export default function RectifierSimulation() {
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-slate-300">
             <div>
-              <p className="mb-2"><strong className="text-white">Average DC Voltage (without capacitor):</strong></p>
+              <p className="mb-2"><strong className="text-white">Average DC voltage, ideal diodes, capacitor off:</strong></p>
               <ul className="list-disc pl-5 space-y-2">
                 <li><span className="font-mono text-indigo-400">Half-Wave:</span> <span className="font-serif italic">V<sub>avg</sub> = V<sub>peak</sub> / π ≈ 0.318 × V<sub>peak</sub></span></li>
                 <li><span className="font-mono text-indigo-400">Full-Wave:</span> <span className="font-serif italic">V<sub>avg</sub> = 2V<sub>peak</sub> / π ≈ 0.636 × V<sub>peak</sub></span></li>
               </ul>
+              <p className="text-xs text-slate-400 mt-2">This circuit drops 0.7 V across each conducting diode, so the average is a little lower. With the filter capacitor on, the output sits near the peak and those two averages do not apply. The capacitor control is a smoothing strength for this slow demo wave, not a laboratory value in µF.</p>
             </div>
             <div>
               <p className="mb-2"><strong className="text-white">Ripple Voltage (with capacitor):</strong></p>

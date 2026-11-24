@@ -116,8 +116,8 @@ const ELEMENT_PRESETS = {
     decayType: "beta_plus",
     halfLifeText: "20.3 Minutes",
     decayConstant: 0.09,
-    qValue: "0.96 MeV",
-    modeDescription: "In proton-rich nuclei, a proton is converted into a neutron by the weak interaction, ejecting a positron (Beta-plus particle / antimatter electron) and an electron neutrino. Positrons rapidly annihilate upon meeting standard matter."
+    qValue: "1.98 MeV",
+    modeDescription: "In proton-rich nuclei, a proton is converted into a neutron by the weak interaction, ejecting a positron and an electron neutrino. The positron endpoint is about 0.96 MeV. Q is about 1.98 MeV because the decay also creates the electron–positron rest energy. Positrons annihilate when they meet electrons."
   },
   GAMMA: {
     name: "Cobalt-60m",
@@ -131,8 +131,8 @@ const ELEMENT_PRESETS = {
     decayType: "gamma",
     halfLifeText: "10.5 Minutes",
     decayConstant: 0.12,
-    qValue: "1.33 MeV",
-    modeDescription: "Gamma decay occurs when a nucleus is left in an excited, metastable nuclear state (often following a previous alpha or beta decay). The nucleons rearrange into a lower energy ground state, ejecting an extremely energetic electromagnetic photon (Gamma-ray)."
+    qValue: "0.059 MeV",
+    modeDescription: "Cobalt-60m is an isomer with a half-life of about 10.5 minutes. It drops to the ground state by emitting a gamma ray of about 59 keV. The familiar 1.17 MeV and 1.33 MeV lines come later, from nickel left excited by beta decay of ground-state cobalt-60 (half-life 5.27 years)."
   }
 };
 
@@ -177,6 +177,17 @@ export default function App() {
   const chamberAnimationFrameRef = useRef(null);
   
   const currentPreset = ELEMENT_PRESETS[decayMode];
+  const decayLambda = currentPreset.decayConstant;
+  const halfLife = Math.LN2 / decayLambda;
+  const plotTMax = Math.max(
+    bulkState.history.length ? bulkState.history[bulkState.history.length - 1].time : 0,
+    2 * halfLife,
+    1
+  );
+  const shownZ = isDecayed ? currentPreset.daughterZ : currentPreset.parentZ;
+  const shownN = isDecayed
+    ? currentPreset.daughterA - currentPreset.daughterZ
+    : currentPreset.parentA - currentPreset.parentZ;
 
   // Initialize parent cluster configuration
   const initializeNucleus = () => {
@@ -245,7 +256,8 @@ export default function App() {
           return atom;
         }
         const roll = Math.random();
-        if (roll < currentPreset.decayConstant * simulationSpeed) {
+        const pDecay = 1 - Math.exp(-currentPreset.decayConstant);
+        if (roll < pDecay) {
           decayedCount++;
           return { ...atom, decayed: true, decayTime: nextTime };
         }
@@ -439,8 +451,10 @@ export default function App() {
             });
 
             if (decayMode === "ALPHA") {
-              const currentLength = particlesRef.current.length;
-              particlesRef.current = particlesRef.current.slice(currentLength > 8 ? 4 : 1);
+              const highlighted = particlesRef.current.filter(n => n.isHighlight);
+              particlesRef.current = highlighted.length
+                ? particlesRef.current.filter(n => !n.isHighlight)
+                : particlesRef.current.slice(4);
               emittedParticlesRef.current.push({
                 type: 'alpha',
                 x: cx + 10, y: cy,
@@ -682,24 +696,30 @@ export default function App() {
         ctx.fillStyle = 'rgba(99, 102, 241, 0.04)';
         ctx.fillRect(0, 0, w, h);
         
-        ctx.strokeStyle = 'rgba(99, 102, 241, 0.15)';
+        const intoPage = fieldStrength >= 0;
+        ctx.strokeStyle = 'rgba(99, 102, 241, 0.28)';
         ctx.lineWidth = 1;
         for (let x = 40; x < w; x += 60) {
           for (let y = 30; y < h; y += 40) {
             ctx.beginPath();
-            ctx.moveTo(x - 4, y - 4); ctx.lineTo(x + 4, y + 4);
-            ctx.moveTo(x + 4, y - 4); ctx.lineTo(x - 4, y + 4);
+            if (intoPage) {
+              ctx.moveTo(x - 4, y - 4); ctx.lineTo(x + 4, y + 4);
+              ctx.moveTo(x + 4, y - 4); ctx.lineTo(x - 4, y + 4);
+            } else {
+              ctx.arc(x, y, 3, 0, Math.PI * 2);
+            }
             ctx.stroke();
           }
         }
         ctx.fillStyle = 'rgba(99, 102, 241, 0.4)';
         ctx.font = '10px monospace';
-        ctx.fillText(`Magnetic Field B (Into Page, Strength: ${fieldStrength})`, 10, 20);
+        ctx.fillText(`Magnetic Field B (${intoPage ? "Into" : "Out of"} the page, strength ${fieldStrength})`, 10, 20);
 
       } else if (chamberFieldType === "electric") {
-        ctx.fillStyle = 'rgba(239, 68, 68, 0.1)'; 
+        const positiveOnTop = fieldStrength >= 0;
+        ctx.fillStyle = positiveOnTop ? 'rgba(239, 68, 68, 0.1)' : 'rgba(59, 130, 246, 0.1)';
         ctx.fillRect(0, 0, w, 15);
-        ctx.fillStyle = 'rgba(59, 130, 246, 0.1)'; 
+        ctx.fillStyle = positiveOnTop ? 'rgba(59, 130, 246, 0.1)' : 'rgba(239, 68, 68, 0.1)';
         ctx.fillRect(0, h - 15, w, 15);
 
         ctx.strokeStyle = 'rgba(148, 163, 184, 0.15)';
@@ -710,16 +730,22 @@ export default function App() {
           ctx.lineTo(x, h - 25);
           ctx.stroke();
           ctx.beginPath();
-          ctx.moveTo(x - 3, h - 29);
-          ctx.lineTo(x, h - 24);
-          ctx.lineTo(x + 3, h - 29);
+          if (positiveOnTop) {
+            ctx.moveTo(x - 3, h - 29);
+            ctx.lineTo(x, h - 24);
+            ctx.lineTo(x + 3, h - 29);
+          } else {
+            ctx.moveTo(x - 3, 29);
+            ctx.lineTo(x, 24);
+            ctx.lineTo(x + 3, 29);
+          }
           ctx.stroke();
         }
-        ctx.fillStyle = 'rgba(239, 68, 68, 0.6)';
         ctx.font = '9px monospace';
-        ctx.fillText("Positive Anode (+)", 10, 11);
+        ctx.fillStyle = 'rgba(239, 68, 68, 0.6)';
+        ctx.fillText("Positive anode (+)", 10, positiveOnTop ? 11 : h - 5);
         ctx.fillStyle = 'rgba(59, 130, 246, 0.6)';
-        ctx.fillText("Negative Cathode (-)", 10, h - 5);
+        ctx.fillText("Negative cathode (−)", 10, positiveOnTop ? h - 5 : 11);
       } else {
         ctx.fillStyle = 'rgba(148, 163, 184, 0.02)';
         ctx.fillRect(0, 0, w, h);
@@ -740,6 +766,7 @@ export default function App() {
           color: '#f87171',
           charge: 2,
           mass: 4,
+          speed0: 3,
           trail: []
         });
         chamberParticles.push({
@@ -748,7 +775,8 @@ export default function App() {
           vx: 5, vy: 0,
           color: '#38bdf8',
           charge: -1,
-          mass: 0.0005,
+          mass: 0.6,
+          speed0: 5,
           trail: []
         });
         chamberParticles.push({
@@ -757,7 +785,8 @@ export default function App() {
           vx: 5, vy: 0,
           color: '#ec4899',
           charge: 1,
-          mass: 0.0005,
+          mass: 0.6,
+          speed0: 5,
           trail: []
         });
         chamberParticles.push({
@@ -767,6 +796,7 @@ export default function App() {
           color: '#c084fc',
           charge: 0,
           mass: 0,
+          speed0: 4.5,
           wavePhase: 0,
           trail: []
         });
@@ -778,28 +808,23 @@ export default function App() {
         p.trail.push({ x: p.x, y: p.y });
         if (p.trail.length > 60) p.trail.shift();
 
-        let ay = 0;
-        let ax = 0;
-
-        if (chamberFieldType === "magnetic") {
+        if (p.mass > 0 && chamberFieldType === "magnetic") {
           const B = fieldStrength * 0.012;
-          const forceY = -p.charge * p.vx * B;
-          const forceX = p.charge * p.vy * B;
-          ay = forceY / (p.mass || 0.1);
-          ax = forceX / (p.mass || 0.1);
-        } else if (chamberFieldType === "electric") {
+          const steps = 4;
+          const dt = simulationSpeed / steps;
+          for (let s = 0; s < steps; s++) {
+            const axm = (p.charge * p.vy * B) / p.mass;
+            const aym = (-p.charge * p.vx * B) / p.mass;
+            p.vx += axm * dt;
+            p.vy += aym * dt;
+          }
+          const sp = Math.hypot(p.vx, p.vy) || 1;
+          const keep = p.speed0 || sp;
+          p.vx *= keep / sp;
+          p.vy *= keep / sp;
+        } else if (p.mass > 0 && chamberFieldType === "electric") {
           const E = fieldStrength * 0.15;
-          const forceY = p.charge * E;
-          ay = forceY / (p.mass || 0.1);
-        }
-
-        p.vx += ax * simulationSpeed;
-        p.vy += ay * simulationSpeed;
-        
-        const speed = Math.hypot(p.vx, p.vy);
-        if (speed > 12) {
-          p.vx = (p.vx / speed) * 12;
-          p.vy = (p.vy / speed) * 12;
+          p.vy += (p.charge * E / p.mass) * simulationSpeed;
         }
 
         p.x += p.vx * simulationSpeed;
@@ -1105,11 +1130,11 @@ export default function App() {
               <div className="absolute top-4 right-4 z-10 hidden sm:flex items-center space-x-3">
                 <div className="flex items-center space-x-1.5 text-xs text-slate-400 bg-slate-950/80 px-2.5 py-1 rounded border border-slate-800/80">
                   <span className="w-2.5 h-2.5 rounded-full bg-red-500 inline-block" />
-                  <span>Protons (Z={currentPreset.parentZ})</span>
+                  <span>Protons (Z={shownZ})</span>
                 </div>
                 <div className="flex items-center space-x-1.5 text-xs text-slate-400 bg-slate-950/80 px-2.5 py-1 rounded border border-slate-800/80">
                   <span className="w-2.5 h-2.5 rounded-full bg-slate-500 inline-block" />
-                  <span>Neutrons (N={currentPreset.parentA - currentPreset.parentZ})</span>
+                  <span>Neutrons (N={shownN})</span>
                 </div>
               </div>
 
@@ -1124,7 +1149,13 @@ export default function App() {
                     isDecayed ? (
                       <span className="text-emerald-400 font-bold">Decay complete! Daughter formed: {currentPreset.daughterName}.</span>
                     ) : (
-                      <span className="text-amber-400 animate-pulse">Nuclear rearrangement active... quantum tunneling occurring.</span>
+                      <span className="text-amber-400 animate-pulse">
+                        {decayMode === "ALPHA"
+                          ? "The alpha particle is tunneling out of the nucleus."
+                          : decayMode === "GAMMA"
+                            ? "The nucleus is dropping to a lower state and emitting a gamma ray."
+                            : "A nucleon is changing by the weak interaction."}
+                      </span>
                     )
                   ) : (
                     <span>Ready to trigger single-atom decay. Observe nucleon clustering & physical core recoil.</span>
@@ -1353,8 +1384,8 @@ export default function App() {
                       {/* Theoretical Curve */}
                       <path
                         d={Array.from({ length: 100 }, (_, x) => {
-                          const time = (x / 100) * 50;
-                          const theoryY = 100 * Math.exp(-currentPreset.decayConstant * time);
+                          const time = (x / 100) * plotTMax;
+                          const theoryY = 100 * Math.exp(-decayLambda * time);
                           const canvasX = x; 
                           const canvasY = 100 - theoryY; 
                           return `${x === 0 ? 'M' : 'L'} ${canvasX} ${canvasY}`;
@@ -1370,9 +1401,7 @@ export default function App() {
                         <path
                           d={bulkState.history.map((h, idx) => {
                             // Safe upper bound limit calculation without exceeding call stack limits
-                            const lastTime = bulkState.history.length > 0 ? bulkState.history[bulkState.history.length - 1].time : 0;
-                            const maxTime = Math.max(lastTime, 40);
-                            const percentX = (h.time / maxTime) * 100;
+                            const percentX = (h.time / plotTMax) * 100;
                             const percentY = 100 - h.active;
                             return `${idx === 0 ? 'M' : 'L'} ${percentX} ${percentY}`;
                           }).join(' ')}
@@ -1387,11 +1416,11 @@ export default function App() {
                     <span className="absolute bottom-2 right-2 text-[10px] text-slate-600 font-bold uppercase">Time Elapsed (t)</span>
                   </div>
 
-                  <div className="flex justify-between text-[10px] text-slate-500 pt-2 font-mono">
-                    <span>t=0</span>
-                    <span>t=1/2</span>
-                    <span>t=3/4</span>
-                    <span>Max limit</span>
+                  <div className="relative h-4 text-[10px] text-slate-500 pt-2 font-mono">
+                    <span className="absolute left-0">t = 0</span>
+                    <span className="absolute -translate-x-1/2" style={{ left: `${(halfLife / plotTMax) * 100}%` }}>T½</span>
+                    <span className="absolute -translate-x-1/2" style={{ left: `${Math.min(92, (2 * halfLife / plotTMax) * 100)}%` }}>2 T½</span>
+                    <span className="absolute right-0">N = N₀/4 at 2 T½</span>
                   </div>
                 </div>
 

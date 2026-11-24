@@ -212,8 +212,10 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 
                     ctx.fillStyle = '#94a3b8';
                     ctx.font = 'bold 11px sans-serif';
-                    ctx.fillText("Emitter (-)", emitterX - 70, centerY + 4);
-                    ctx.fillText("Collector (+)", collectorX + 20, centerY + 4);
+                    const emitterSign = voltage < 0 ? "+" : "−";
+                    const collectorSign = voltage < 0 ? "−" : "+";
+                    ctx.fillText(`Emitter (${emitterSign})`, emitterX - 78, centerY + 4);
+                    ctx.fillText(`Collector (${collectorSign})`, collectorX + 16, centerY + 4);
 
                     // 3. Photon Logic
                     const photonColor = wavelengthToRGB(wavelength);
@@ -238,7 +240,8 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 
                         if (p.progress >= 1.0) {
                             if (isEmitting) {
-                                const baseSpeed = Math.sqrt(kMax) * 1.2 + 0.3;
+                                const launchScale = 1.2;
+                                const baseSpeed = Math.sqrt(Math.max(0, kMax)) * launchScale;
                                 electrons.push({
                                     x: emitterX,
                                     y: p.targetY,
@@ -276,7 +279,10 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
                     }
 
                     // 4. Electron Logic
-                    const electricFieldAccel = voltage * 0.03; 
+                    const gap = collectorX - emitterX;
+                    const launchScale = 1.2;
+                    // a = V * v0² / (2 * gap * Kmax) so the fastest electron stops exactly at the collector when V = −Kmax.
+                    const electricFieldAccel = voltage * (launchScale * launchScale) / (2 * gap); 
 
                     for (let i = electrons.length - 1; i >= 0; i--) {
                         const e = electrons[i];
@@ -734,7 +740,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
                                         </div>
                                         <div className="text-slate-300 font-semibold flex items-center gap-1">
                                             <span>V₀ =</span>
-                                            <span className="text-sm font-bold font-mono-custom text-sky-400">-{stoppingPotential.toFixed(2)} V</span>
+                                            <span className="text-sm font-bold font-mono-custom text-sky-400">+{stoppingPotential.toFixed(2)} V</span>
                                             <span className="text-slate-500 text-[10px] font-normal"> (Cut-off point)</span>
                                         </div>
                                     </div>

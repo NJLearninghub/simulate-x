@@ -102,7 +102,7 @@ const modelsData = {
         <div className="flex flex-col items-center justify-center gap-3 text-sm">
           <div>L = m<sub>e</sub> v r = n(h / 2π)</div>
           <div className="flex items-center gap-2">
-            <span>E<sub>n</sub> = -R<sub>H</sub></span>
+            <span>E<sub>n</sub> = −(13.6 eV)</span>
             <span className="text-xl font-light">(</span>
             <div className="flex flex-col items-center">
               <span className="border-b border-emerald-400/50 px-1 pb-0.5">1</span>
@@ -118,7 +118,7 @@ const modelsData = {
           </div>
         </div>
         <div className="text-[10px] text-slate-500 mt-2 border-t border-slate-900 pt-2 text-center">
-          Where n represents the principal quantum number, and R<sub>H</sub> is the Rydberg constant.
+          Hydrogen. 13.6 eV is the ionisation energy. The Rydberg constant is a different quantity: R = 1.097×10⁷ m⁻¹ in 1/λ = R(1/n₁² − 1/n₂²).
         </div>
       </div>
     ),
@@ -469,7 +469,11 @@ export default function App() {
 
       ctx.fillStyle = '#ffffff';
       ctx.font = 'bold 9px monospace';
-      ctx.fillText(`Gold Nucleus (+79e)`, cx - 45, cy - 15);
+      ctx.fillText(
+        nucleusZ === 79 ? `Gold nucleus (+${nucleusZ}e)` : `Nucleus (Z = ${nucleusZ})`,
+        cx - 55,
+        cy - 15
+      );
 
       if (isPlaying) {
         if (Math.random() < 0.16 * simSpeed) {
