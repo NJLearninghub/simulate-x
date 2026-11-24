@@ -179,9 +179,9 @@ const SHMSimulation = () => {
         return system === 'pendulum' ? v * (180/Math.PI) : v;
       };
       color = '#22c55e';
-      label = system === 'spring' ? 'Velocity (v)' : 'Ang. Velocity (ω)';
+      label = system === 'spring' ? 'Velocity (v)' : 'Angular velocity (θ̇)';
       unit = system === 'spring' ? 'm/s' : '°/s';
-      equation = system === 'spring' ? 'v(t) = -Aω sin(ωt)' : 'ω(t) = -θ₀ω sin(ωt)';
+      equation = system === 'spring' ? 'v(t) = −Aω sin(ωt)' : 'θ̇(t) = −θ₀ ω sin(ωt)';
     } else {
       maxVal = currentAmp * omega * omega;
       if (system === 'pendulum') maxVal = maxVal * (180/Math.PI);
@@ -190,9 +190,9 @@ const SHMSimulation = () => {
         return system === 'pendulum' ? a * (180/Math.PI) : a;
       };
       color = '#ef4444';
-      label = system === 'spring' ? 'Acceleration (a)' : 'Ang. Accel (α)';
+      label = system === 'spring' ? 'Acceleration (a)' : 'Angular acceleration (θ̈)';
       unit = system === 'spring' ? 'm/s²' : '°/s²';
-      equation = system === 'spring' ? 'a(t) = -Aω² cos(ωt)' : 'α(t) = -θ₀ω² cos(ωt)';
+      equation = system === 'spring' ? 'a(t) = −Aω² cos(ωt)' : 'θ̈(t) = −θ₀ ω² cos(ωt)';
     }
 
     // Safety fallback for maxVal
@@ -337,13 +337,12 @@ const SHMSimulation = () => {
                       <span className="text-slate-500 font-mono">{pendulumAmp.toFixed(0)}°</span>
                     </div>
                     <input 
-                      type="range" min="5" max="45" step="1" value={pendulumAmp} 
+                      type="range" min="5" max="15" step="1" value={Math.min(pendulumAmp, 15)} 
                       onChange={(e) => setPendulumAmp(parseFloat(e.target.value))}
                       className="w-full accent-purple-600"
                     />
                     <p className="text-xs text-slate-500 mt-2">
-                      The period shown is the NCERT small-angle result T = 2π √(L/g).
-                      {pendulumAmp > 15 ? " Above about 15° that formula is only approximate — the true period is a little longer." : " It is accurate for angles up to about 15°."}
+                      The period is the NCERT small-angle result T = 2π √(L/g), which uses sin θ ≈ θ. The slider stops at 15°.
                     </p>
                   </div>
                 </>

@@ -329,7 +329,11 @@ export default function RollingMotionSimulation() {
           <div className="lg:col-span-2 bg-slate-800 rounded-2xl shadow-lg border border-slate-700 overflow-hidden relative">
             <div className="absolute top-4 left-4 bg-slate-900/80 p-2 rounded-lg border border-slate-700 flex space-x-4 text-xs font-mono">
               <span className="text-emerald-400">Time: {time.toFixed(2)}s</span>
-              <span className="text-cyan-400">Accel: {((G * Math.sin(angleRad)) / (1 + (mode === 'race' ? SHAPES['solidSphere'].k : SHAPES[selectedShape].k))).toFixed(2)} m/s² (Fastest)</span>
+              <span className="text-cyan-400">
+                {mode === 'race'
+                  ? `Accel: ${((G * Math.sin(angleRad)) / (1 + SHAPES.solidSphere.k)).toFixed(2)} m/s² (fastest, solid sphere)`
+                  : `${SHAPES[selectedShape].name}: ${((G * Math.sin(angleRad)) / (1 + SHAPES[selectedShape].k)).toFixed(2)} m/s²`}
+              </span>
             </div>
 
             <svg viewBox="0 0 1000 550" className="w-full h-full">

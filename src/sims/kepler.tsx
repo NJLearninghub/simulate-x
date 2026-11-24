@@ -355,11 +355,13 @@ export default function App() {
               <span className="font-mono font-medium text-blue-400">{initialVel}</span>
             </div>
             <input 
-              type="range" min="0.5" max="3.5" step="0.1" 
+              type="range" min="0.5" max="6" step="0.1" 
               value={initialVel} onChange={(e) => setInitialVel(parseFloat(e.target.value))}
               className="accent-blue-500 cursor-pointer"
             />
-            <p className="text-xs text-slate-500 mt-1">~2.58 yields a perfectly circular orbit.</p>
+            <p className="text-xs text-slate-500 mt-1">
+              Circular speed √(GM/r) = {Math.sqrt(starMass / 150).toFixed(2)}. Escape speed √(2GM/r) = {Math.sqrt(2 * starMass / 150).toFixed(2)}. Those are different: 2.58 is circular only for the default star mass.
+            </p>
           </div>
 
           <div className="flex flex-col gap-2">

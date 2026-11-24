@@ -105,8 +105,10 @@ export default function CollisionSimulator() {
     const dy = b2.y - b1.y;
     const dist = Math.sqrt(dx * dx + dy * dy);
 
-    if (dist <= b1.r + b2.r) {
-      // Normal vector
+    if (dist < 1e-6) {
+      b2.x = b1.x + b1.r + b2.r;
+      b2.y = b1.y;
+    } else if (dist <= b1.r + b2.r) {
       const nx = dx / dist;
       const ny = dy / dist;
 
@@ -333,8 +335,8 @@ export default function CollisionSimulator() {
                 className="w-full accent-indigo-600"
               />
               <div className="flex justify-between text-xs text-slate-400 mt-1">
-                <span>Inelastic (Sticky)</span>
-                <span>Elastic (Bouncy)</span>
+                <span>Perfectly inelastic (e = 0)</span>
+                <span>Elastic (e = 1)</span>
               </div>
             </div>
           </div>
