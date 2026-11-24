@@ -87,7 +87,9 @@ const WheatstoneBridge = () => {
     offsets.current.wg -= physics.ig * K; // C to D
     
     const totalCurrent = physics.i1 + physics.i2;
-    offsets.current.wmain -= totalCurrent * K;
+    // Path is drawn from A (positive) through the cell to B (negative).
+    // Conventional current leaves the positive terminal, so the dashes run from B back toward A.
+    offsets.current.wmain += totalCurrent * K;
 
     // Apply to DOM directly for 60fps performance without React re-renders
     if (wireRefs.w1.current) wireRefs.w1.current.setAttribute('stroke-dashoffset', offsets.current.w1);

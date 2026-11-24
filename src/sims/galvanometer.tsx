@@ -157,7 +157,7 @@ export default function App() {
               <span>Deflecting Torque (<span className="text-emerald-400">τ_d</span>)</span>
               <span>{deflectingTorque.toFixed(1)} μN·m</span>
             </div>
-            <div className="text-xs text-slate-500 text-right">τ_d = N · I · A · B</div>
+            <div className="text-xs text-slate-500 text-right">τ = NIAB × 0.1 (mA, cm², T → μN·m)</div>
             
             <div className="flex justify-between items-center text-slate-300 mt-2">
               <span>Deflection Angle (<span className="text-blue-400">φ</span>)</span>

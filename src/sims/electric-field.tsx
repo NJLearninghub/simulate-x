@@ -377,7 +377,7 @@ export default function ElectricFieldVisualizer() {
           <div className="bg-slate-800/50 rounded-xl p-4 border border-slate-700/50 mt-auto">
              <p className="text-xs uppercase tracking-wider text-slate-400 mb-2 font-semibold">Interactive Sandbox</p>
              <p className="text-sm text-yellow-200/90 leading-relaxed">
-                Drag the <span className="font-bold text-yellow-400">Yellow Probe</span> around the canvas to see the resultant net force vector calculate and shift in real-time!
+                Drag the <span className="font-bold text-yellow-400">Yellow Probe</span> around the canvas to see the net electric field at that point. The arrow is E, not the force. A positive test charge would feel F = q₀E along the same direction.
              </p>
           </div>
         </div>
@@ -392,7 +392,7 @@ export default function ElectricFieldVisualizer() {
         <div className="absolute top-4 left-4 bg-slate-950/80 backdrop-blur border border-slate-800 p-3 rounded-xl shadow-lg pointer-events-none z-10">
           <p className="font-mono text-sm text-cyan-300">
             <span className="opacity-70 text-slate-400">Superposition:</span> <br/>
-            E-Net = Σ k·q / r²
+            E⃗_net = Σ k q r̂ / r²
           </p>
         </div>
 

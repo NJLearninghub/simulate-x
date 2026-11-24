@@ -62,8 +62,12 @@ import { Settings2, Info, Activity } from 'lucide-react';
             const material = MATERIALS[materialId];
             
             // Mathematical calculations for visualization
-            const M = material.chiVis * hField; // Magnetisation
-            const B = hField + M; // Total Field (Proportional visualization)
+            const M = material.chiVis * hField; // Magnetisation, schematic χ
+            const B = hField + M; // Proportional to μ0(H + M)
+            const Bmax = 100 * (1 + 2.5); // full scale is ferromagnetic B at H = 100
+            const hWidth = (hField / Bmax) * 100;
+            const bWidth = (Math.max(0, B) / Bmax) * 100;
+            const mMag = Math.min(50, Math.abs(M) / 5); // |M| = 250 fills half the centred track
 
             // Generate SVG Field Lines
             const generateFieldLines = () => {
@@ -105,7 +109,9 @@ import { Settings2, Info, Activity } from 'lucide-react';
                         // Only bend lines that are somewhat near the block
                         const bendAmount = Math.sign(distFromCenter) * bendStrength * Math.exp(-Math.abs(distFromCenter)/100);
                         
-                        const midY = yOffset - bendAmount;
+                        // SVG y grows downward. Adding bendAmount pulls para/ferro lines
+                        // toward the slab and pushes diamagnetic lines away.
+                        const midY = yOffset + bendAmount;
                         
                         path = `M 0,${yOffset} C 150,${yOffset} 250,${midY} 300,${midY} C 350,${midY} 450,${yOffset} ${canvasWidth},${yOffset}`;
                     }
@@ -313,7 +319,7 @@ import { Settings2, Info, Activity } from 'lucide-react';
                                                 <span className="text-blue-400 font-bold">H (External Intensity)</span>
                                             </div>
                                             <div className="h-4 bg-slate-800 rounded-full overflow-hidden flex">
-                                                <div className="h-full bg-blue-500 transition-all duration-300" style={{ width: `${hField}%` }}></div>
+                                                <div className="h-full bg-blue-500 transition-all duration-300" style={{ width: `${hWidth}%` }}></div>
                                             </div>
                                         </div>
 
@@ -323,6 +329,7 @@ import { Settings2, Info, Activity } from 'lucide-react';
                                                 <span className={`${material.color} font-bold`}>M (Magnetisation = χH)</span>
                                                 <span className="text-slate-400 text-[10px]">
                                                     {materialId === 'diamagnetic' || materialId === 'superconductor' ? 'Opposing' : 'Aligned'}
+                                                    {' '}· schematic χ = {material.chiVis}
                                                 </span>
                                             </div>
                                             <div className="h-4 bg-slate-800 rounded-full overflow-hidden flex relative">
@@ -330,10 +337,9 @@ import { Settings2, Info, Activity } from 'lucide-react';
                                                 <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-slate-600 z-10"></div>
                                                 <div className="h-full absolute transition-all duration-300 z-0" 
                                                      style={{ 
-                                                         width: `${Math.min(100, Math.abs(M))}%`, 
+                                                         width: `${mMag}%`, 
                                                          backgroundColor: M < 0 ? '#f43f5e' : (materialId==='ferromagnetic' ? '#fbbf24' : '#34d399'),
-                                                         left: M < 0 ? `calc(50% - ${Math.min(50, Math.abs(M)/2)}%)` : '50%',
-                                                         transform: M < 0 ? 'none' : 'none'
+                                                         left: M < 0 ? `calc(50% - ${mMag}%)` : '50%',
                                                      }}>
                                                 </div>
                                             </div>
@@ -346,7 +352,7 @@ import { Settings2, Info, Activity } from 'lucide-react';
                                             </div>
                                             <div className="h-4 bg-slate-800 rounded-full overflow-hidden flex relative">
                                                 <div className="h-full bg-white transition-all duration-300" 
-                                                     style={{ width: `${Math.max(0, Math.min(100, (hField + (M>0?M:M*2)) / (materialId==='ferromagnetic'? 1.5 : 1)))}%` }}>
+                                                     style={{ width: `${bWidth}%` }}>
                                                 </div>
                                                 {materialId === 'superconductor' && hField > 0 && (
                                                     <div className="absolute inset-0 flex items-center justify-center text-[10px] font-bold text-black bg-white">

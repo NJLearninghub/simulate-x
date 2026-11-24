@@ -74,7 +74,7 @@ export default function App() {
 
       return {
         cx: width / 2 + x1 * scale,
-        cy: height / 2 + y1 * scale,
+        cy: height / 2 - y1 * scale,
         zDepth: z1 
       };
     };
@@ -126,10 +126,9 @@ export default function App() {
     const r = dashboardStats.radius;
     
     // Calculate the start position so that the orbit revolves EXACTLY around x=0.
-    // Right hand rule: V is +X, B is -Z. Force is V x B = +Y.
-    // To center the orbit at X=0, we launch from X=0.
-    // The force will pull it in the Y direction, so we offset Y by -radius.
-    const startY = -r * Math.sign(charge * bzDirection);
+    // +y is up on the canvas. B is into the page (−z). For q>0 and v along +x,
+    // v × B is +y, so the centre of the orbit is the origin only if we start at y = −r.
+    const startY = r * Math.sign(charge * bzDirection);
 
     let pos = { 
       x: 0, // Perfectly centered on X-Axis!

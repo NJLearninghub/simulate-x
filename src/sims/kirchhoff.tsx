@@ -127,12 +127,11 @@ const KCLModule = ({ i1, i2, i3, i4, setI1, setI2, setI3, time }) => {
               for (let j = 0; j < 5; j++) {
                 // Base offset + time factor. 
                 // Modulo 1 to loop from 0 to 1 along the line
-                let progress = ((j * 0.2) + (time * 0.005 * speedMultiplier * (isEntering ? 1 : -1))) % 1;
-                if (progress < 0) progress += 1; // fix negative modulo
-                
-                // If entering, progress 0 = outer (x2,y2), 1 = center (0,0)
-                // Actually, let's always map 0 -> center, 1 -> outer.
-                // If entering, particles move from 1 to 0.
+                // progress 0 is the junction, progress 1 is the outer end.
+                // Entering current must run from the outer end toward the junction.
+                const dir = isEntering ? -1 : 1;
+                let progress = ((j * 0.2) + (time * 0.005 * speedMultiplier * dir)) % 1;
+                if (progress < 0) progress += 1;
                 const px = x2 * progress;
                 const py = y2 * progress;
                 
