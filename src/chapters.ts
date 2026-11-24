@@ -39,6 +39,8 @@ const math10 = "NCERT Class 10 Mathematics";
 const phy11 = "NCERT Class 11 Physics";
 const chem11 = "NCERT Class 11 Chemistry";
 const phy12 = "NCERT Class 12 Physics";
+const math11 = "NCERT Class 11 Mathematics";
+const math12 = "NCERT Class 12 Mathematics";
 
 /**
  * Rationalised NCERT chapter lists.
@@ -151,6 +153,37 @@ export const CHAPTERS: Chapter[] = [
   ch(12, "physics", 12, "Atoms", phy12),
   ch(12, "physics", 13, "Nuclei", phy12),
   ch(12, "physics", 14, "Semiconductor Electronics: Materials, Devices and Simple Circuits", phy12),
+
+  // Class 11 Mathematics — rationalised textbook (PMI and Mathematical Reasoning removed)
+  ch(11, "maths", 1, "Sets", math11),
+  ch(11, "maths", 2, "Relations and Functions", math11),
+  ch(11, "maths", 3, "Trigonometric Functions", math11),
+  ch(11, "maths", 4, "Complex Numbers and Quadratic Equations", math11),
+  ch(11, "maths", 5, "Linear Inequalities", math11),
+  ch(11, "maths", 6, "Permutations and Combinations", math11),
+  ch(11, "maths", 7, "Binomial Theorem", math11),
+  ch(11, "maths", 8, "Sequences and Series", math11),
+  ch(11, "maths", 9, "Straight Lines", math11),
+  ch(11, "maths", 10, "Conic Sections", math11),
+  ch(11, "maths", 11, "Introduction to Three Dimensional Geometry", math11),
+  ch(11, "maths", 12, "Limits and Derivatives", math11),
+  ch(11, "maths", 13, "Statistics", math11),
+  ch(11, "maths", 14, "Probability", math11),
+
+  // Class 12 Mathematics — rationalised textbook
+  ch(12, "maths", 1, "Relations and Functions", math12),
+  ch(12, "maths", 2, "Inverse Trigonometric Functions", math12),
+  ch(12, "maths", 3, "Matrices", math12),
+  ch(12, "maths", 4, "Determinants", math12),
+  ch(12, "maths", 5, "Continuity and Differentiability", math12),
+  ch(12, "maths", 6, "Application of Derivatives", math12),
+  ch(12, "maths", 7, "Integrals", math12),
+  ch(12, "maths", 8, "Application of Integrals", math12),
+  ch(12, "maths", 9, "Differential Equations", math12),
+  ch(12, "maths", 10, "Vector Algebra", math12),
+  ch(12, "maths", 11, "Three Dimensional Geometry", math12),
+  ch(12, "maths", 12, "Linear Programming", math12),
+  ch(12, "maths", 13, "Probability", math12),
 ];
 
 export function chaptersFor(classId: ClassId, subject: SubjectId): Chapter[] {

@@ -205,7 +205,7 @@ export const SIMS: SimEntry[] = [
     chapter: 3,
     title: "Wheatstone Bridge",
     explore:
-      "Balance the bridge so the galvanometer current is zero. That happens when P/Q = R/S. Off balance, the current direction follows the higher-potential arm.",
+      "Balance the bridge so the galvanometer current is zero. That happens when P/Q = R/S. In mystery mode, find the hidden resistor from the balance condition.",
     Component: lazy(() => import("./sims/wheatstone")),
   },
   {
@@ -317,6 +317,116 @@ export const SIMS: SimEntry[] = [
     explore:
       "A half-wave rectifier uses one half of the AC cycle (average Vm/π). A full-wave rectifier uses both (average 2Vm/π) and the ripple frequency doubles. A capacitor smooths the output.",
     Component: lazy(() => import("./sims/rectifier")),
+  },
+  {
+    id: "unit-circle",
+    classId: 11,
+    subject: "maths",
+    chapter: 3,
+    title: "Unit Circle and Sine, Cosine",
+    explore:
+      "Move around the unit circle. The x-coordinate is cos θ and the y-coordinate is sin θ. Watch both waves grow as the angle runs from 0° to 360°.",
+    Component: lazy(() => import("./sims/unit-circle")),
+  },
+  {
+    id: "galileo-odd-numbers",
+    classId: 11,
+    subject: "physics",
+    chapter: 2,
+    title: "Galileo’s Law of Odd Numbers",
+    explore:
+      "A body falling from rest covers distances in successive equal times in the ratio 1 : 3 : 5 : 7. Predict the next odd multiple of the first distance.",
+    Component: lazy(() => import("./sims/galileo")),
+  },
+  {
+    id: "continuity",
+    classId: 12,
+    subject: "maths",
+    chapter: 5,
+    title: "Continuity and Differentiability",
+    explore:
+      "Compare a smooth curve, a sharp corner, a jump and a hole. A function is continuous at c when the left and right limits equal f(c), and differentiable only when the left and right derivatives also match.",
+    Component: lazy(() => import("./sims/continuity")),
+  },
+  {
+    id: "derivative-rules",
+    classId: 12,
+    subject: "maths",
+    chapter: 5,
+    title: "Product and Quotient Rules",
+    explore:
+      "Build (uv)' = u'v + uv' and (u/v)' = (u'v − uv')/v² one piece at a time for products and quotients from the Class 12 calculus list.",
+    Component: lazy(() => import("./sims/derivative-rules")),
+  },
+  {
+    id: "increasing-decreasing",
+    classId: 12,
+    subject: "maths",
+    chapter: 6,
+    title: "Increasing and Decreasing Functions",
+    explore:
+      "Slide a tangent along the curve. Where f'(x) > 0 the function is increasing, and where f'(x) < 0 it is decreasing. The sign changes at the critical points.",
+    Component: lazy(() => import("./sims/increasing")),
+  },
+  {
+    id: "maxima-minima",
+    classId: 12,
+    subject: "maths",
+    chapter: 6,
+    title: "Maxima and Minima",
+    explore:
+      "Find where f'(x) = 0. The second derivative test says f''(x) < 0 is a local maximum and f''(x) > 0 is a local minimum.",
+    Component: lazy(() => import("./sims/maxima")),
+  },
+  {
+    id: "gradient-descent",
+    classId: 12,
+    subject: "maths",
+    chapter: 6,
+    title: "Gradient Descent",
+    explore:
+      "Beyond the syllabus: step downhill with w ← w − α L'(w). A small learning rate finds the minimum. Too large a rate overshoots. A non-convex curve can trap the walker in a local minimum.",
+    Component: lazy(() => import("./sims/gradient-descent")),
+  },
+  {
+    id: "application-of-integrals",
+    classId: 12,
+    subject: "maths",
+    chapter: 8,
+    title: "Area under a Curve",
+    explore:
+      "The area from 0 to a is the integral of y dx. Compare a parabola, a quarter circle, an ellipse and a sine wave with the exact antiderivative.",
+    Component: lazy(() => import("./sims/integrals")),
+  },
+  {
+    id: "matrices",
+    classId: 12,
+    subject: "maths",
+    chapter: 3,
+    title: "Matrix Multiplication",
+    explore:
+      "Click a cell of C = AB. That entry is the dot product of a row of A with a column of B. Then see the same rule rotate a shape and total a shop’s cost.",
+    Component: lazy(() => import("./sims/matrices")),
+  },
+  {
+    id: "vector-resolution",
+    classId: 12,
+    subject: "maths",
+    chapter: 10,
+    title: "Resolving a Vector in 3D",
+    explore:
+      "A vector ai + bj + ck has magnitude √(a²+b²+c²). Its direction cosines are a/r, b/r and c/r, and they satisfy l² + m² + n² = 1.",
+    Component: lazy(() => import("./sims/vector-resolution")),
+  },
+  {
+    id: "lines-3d",
+    classId: 12,
+    subject: "maths",
+    chapter: 11,
+    title: "Lines in Three Dimensions",
+    explore:
+      "Drag to orbit the scene. Read direction cosines, the line through two points, the line r = a + λv, and the acute angle between two lines.",
+    Component: lazy(() => import("./sims/lines3d")),
   },
 ];
 
