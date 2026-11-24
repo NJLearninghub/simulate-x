@@ -52,7 +52,7 @@ export function HomePage() {
         Interactive simulations
       </h1>
       <p className="m-0 max-w-2xl text-[17px] leading-relaxed text-[var(--text-muted)]">
-        Pick a class, open an NCERT chapter, and experiment. Built for students of NJ Learning Hub — no sign-in.
+        Open to every curious mind from Std 9 to 12 — explore, experiment and see Physics, Chemistry, Maths and Biology come alive.
       </p>
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
         {CLASSES.map((id) => {

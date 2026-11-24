@@ -118,7 +118,7 @@ export function Shell({ children }: { children: ReactNode }) {
       <Header />
       <main className="flex-1">{children}</main>
       <footer className="border-t border-[var(--border)] py-6 text-center text-sm text-[var(--text-muted)]">
-        SimulateX by NJ Learning Hub · Classes 9–12 · Ahmedabad
+        SimulateX by NJ Learning Hub · Open to every curious mind, Std 9–12
       </footer>
     </div>
   );
