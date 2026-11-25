@@ -393,9 +393,9 @@ export const SIMS: SimEntry[] = [
     classId: 12,
     subject: "maths",
     chapter: 8,
-    title: "Area under a Curve",
+    title: "Area Bounded by Curves",
     explore:
-      "The area from 0 to a is the integral of y dx. Compare a parabola, a quarter circle, an ellipse and a sine wave with the exact antiderivative.",
+      "Shade the region inside a circle, an ellipse, or a parabola up to a chosen line. Read the integral, its antiderivative, and the value, then compare it with πa², πab, or 8a²/3.",
     Component: lazy(() => import("./sims/integrals")),
   },
   {
