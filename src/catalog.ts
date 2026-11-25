@@ -428,6 +428,286 @@ export const SIMS: SimEntry[] = [
       "Drag to orbit the scene. Read direction cosines, the line through two points, the line r = a + λv, and the acute angle between two lines.",
     Component: lazy(() => import("./sims/lines3d")),
   },
+  {
+    id: "vernier-caliper",
+    classId: 11,
+    subject: "physics",
+    chapter: 1,
+    title: "Vernier Caliper",
+    explore:
+      "Drag the movable jaw and read the division that lines up. The least count is the absolute error, so a longer object has a smaller relative error.",
+    Component: lazy(() => import("./sims/units")),
+  },
+  {
+    id: "work-energy-power",
+    classId: 11,
+    subject: "physics",
+    chapter: 5,
+    title: "Work, Energy and Power",
+    explore:
+      "Turn the force arrow and slide the block. Work is Fs cos θ, so a perpendicular force does none, and the work that is done becomes kinetic energy.",
+    Component: lazy(() => import("./sims/work-energy")),
+  },
+  {
+    id: "youngs-modulus",
+    classId: 11,
+    subject: "physics",
+    chapter: 8,
+    title: "Young’s Modulus",
+    explore:
+      "Hang a load on a metal wire and drag its thickness. Stress is force per area, strain is the fractional stretch, and their ratio is Young’s modulus.",
+    Component: lazy(() => import("./sims/solids")),
+  },
+  {
+    id: "thermal-expansion",
+    classId: 11,
+    subject: "physics",
+    chapter: 10,
+    title: "Thermal Expansion",
+    explore:
+      "Drag the thermometer. A rod grows by L₀αΔT, and the hole in a plate grows by the same factor. Aluminium expands more than steel.",
+    Component: lazy(() => import("./sims/thermal")),
+  },
+  {
+    id: "thermodynamic-processes",
+    classId: 11,
+    subject: "physics",
+    chapter: 11,
+    title: "Thermodynamic Processes",
+    explore:
+      "Drag the piston on a P–V diagram. Compare isothermal, isobaric, isochoric and adiabatic paths, and check ΔU = Q − W.",
+    Component: lazy(() => import("./sims/thermo")),
+  },
+  {
+    id: "maxwell-distribution",
+    classId: 11,
+    subject: "physics",
+    chapter: 12,
+    title: "Maxwell Speed Distribution",
+    explore:
+      "Drag the temperature and switch the gas. Most probable, average and rms speeds stay in that order, and they scale with the square root of T/M.",
+    Component: lazy(() => import("./sims/kinetic")),
+  },
+  {
+    id: "ray-diagrams",
+    classId: 12,
+    subject: "physics",
+    chapter: 9,
+    title: "Ray Diagrams",
+    explore:
+      "Drag the object and the focus for a mirror or a lens. The signed formula 1/v ± 1/u = 1/f tells you whether the image is real or virtual.",
+    Component: lazy(() => import("./sims/ray-optics")),
+  },
+  {
+    id: "youngs-double-slit",
+    classId: 12,
+    subject: "physics",
+    chapter: 10,
+    title: "Young’s Double Slit",
+    explore:
+      "Drag the slits, the colour and a point on the screen. Fringe width is λD/d, and a path difference of λ/2 is a dark band.",
+    Component: lazy(() => import("./sims/young")),
+  },
+  {
+    id: "venn-sets",
+    classId: 11,
+    subject: "maths",
+    chapter: 1,
+    title: "Sets and Venn Diagrams",
+    explore:
+      "Drag numbers into the circles. The overlap is counted twice if you add n(A) and n(B), so n(A ∪ B) subtracts it once.",
+    Component: lazy(() => import("./sims/sets")),
+  },
+  {
+    id: "arrow-diagrams",
+    classId: 11,
+    subject: "maths",
+    chapter: 2,
+    title: "Relations and Functions",
+    explore:
+      "Drag arrows from each input to an output. A function needs exactly one arrow per input. One-one and onto means a perfect matching.",
+    Component: lazy(() => import("./sims/relations")),
+  },
+  {
+    id: "argand-plane",
+    classId: 11,
+    subject: "maths",
+    chapter: 4,
+    title: "Argand Plane",
+    explore:
+      "Drag z = x + iy. The modulus is its distance from the origin, the conjugate is its mirror image, and multiplying by i turns it by 90°.",
+    Component: lazy(() => import("./sims/argand")),
+  },
+  {
+    id: "linear-half-plane",
+    classId: 11,
+    subject: "maths",
+    chapter: 5,
+    title: "Linear Inequalities",
+    explore:
+      "Drag the boundary and a test point. One side of x + y = c satisfies the inequality; the origin is the quickest point to check.",
+    Component: lazy(() => import("./sims/inequalities")),
+  },
+  {
+    id: "permutations-combinations",
+    classId: 11,
+    subject: "maths",
+    chapter: 6,
+    title: "Permutations and Combinations",
+    explore:
+      "Drag people into seats. Arrangements count order, so there are nPr of them. A committee ignores order, so divide by r!.",
+    Component: lazy(() => import("./sims/permutations")),
+  },
+  {
+    id: "binomial-expansion",
+    classId: 11,
+    subject: "maths",
+    chapter: 7,
+    title: "Binomial Theorem",
+    explore:
+      "Drag n and watch Pascal’s row. The bars are the terms of (a + b)ⁿ, and they add up to (a + b)ⁿ exactly.",
+    Component: lazy(() => import("./sims/binomial")),
+  },
+  {
+    id: "sequences-series",
+    classId: 11,
+    subject: "maths",
+    chapter: 8,
+    title: "Sequences and Series",
+    explore:
+      "Drag the first two bars to set an AP or a GP. The nth term and the sum update from the closed formulas, not from adding by hand.",
+    Component: lazy(() => import("./sims/sequences")),
+  },
+  {
+    id: "straight-line",
+    classId: 11,
+    subject: "maths",
+    chapter: 9,
+    title: "Straight Lines",
+    explore:
+      "Drag two points to fix a line and a third point to measure the perpendicular distance. A horizontal line has slope 0; a vertical line has none.",
+    Component: lazy(() => import("./sims/straight-lines")),
+  },
+  {
+    id: "conic-sections",
+    classId: 11,
+    subject: "maths",
+    chapter: 10,
+    title: "Conic Sections",
+    explore:
+      "Drag the eccentricity through 1. A circle, ellipse, parabola and hyperbola are the same rule: distance to the focus over distance to the directrix.",
+    Component: lazy(() => import("./sims/conics")),
+  },
+  {
+    id: "points-in-space",
+    classId: 11,
+    subject: "maths",
+    chapter: 11,
+    title: "Points in Space",
+    explore:
+      "Drag two points and the height of one of them. Distance is √(Δx² + Δy² + Δz²), and a ratio m:n marks the section point.",
+    Component: lazy(() => import("./sims/intro-3d")),
+  },
+  {
+    id: "secant-to-tangent",
+    classId: 11,
+    subject: "maths",
+    chapter: 12,
+    title: "Limits and Derivatives",
+    explore:
+      "Drag the second point toward the first. The secant slope of x² at x = 2 approaches 4, which is the derivative.",
+    Component: lazy(() => import("./sims/limits")),
+  },
+  {
+    id: "mean-and-spread",
+    classId: 11,
+    subject: "maths",
+    chapter: 13,
+    title: "Mean and Standard Deviation",
+    explore:
+      "Drag the data points. The mean is their balance point. Adding 2 to every value moves the mean and leaves the standard deviation alone.",
+    Component: lazy(() => import("./sims/statistics")),
+  },
+  {
+    id: "two-dice",
+    classId: 11,
+    subject: "maths",
+    chapter: 14,
+    title: "Classical Probability",
+    explore:
+      "Paint outcomes on the 6×6 board of two dice. Probability is the number you painted divided by 36. Sum 7 has six cells.",
+    Component: lazy(() => import("./sims/probability-11")),
+  },
+  {
+    id: "inverse-and-composition",
+    classId: 12,
+    subject: "maths",
+    chapter: 1,
+    title: "Inverse and Composition",
+    explore:
+      "Drag x along f(x) = 2x + 3 and its reflection in y = x. Then compose with x² and see that f∘g and g∘f disagree.",
+    Component: lazy(() => import("./sims/functions-12")),
+  },
+  {
+    id: "inverse-sine",
+    classId: 12,
+    subject: "maths",
+    chapter: 2,
+    title: "Inverse Trigonometric Functions",
+    explore:
+      "Drag the angle on the principal arc. sin⁻¹(1/2) is 30°, and sin⁻¹ x + cos⁻¹ x stays 90° wherever you stop.",
+    Component: lazy(() => import("./sims/inverse-trig")),
+  },
+  {
+    id: "parallelogram-area",
+    classId: 12,
+    subject: "maths",
+    chapter: 4,
+    title: "Determinants as Area",
+    explore:
+      "Drag two vectors. The determinant is the signed area of their parallelogram. Parallel vectors give 0, and swapping them flips the sign.",
+    Component: lazy(() => import("./sims/determinants")),
+  },
+  {
+    id: "riemann-sums",
+    classId: 12,
+    subject: "maths",
+    chapter: 7,
+    title: "Riemann Sums",
+    explore:
+      "Drag the number of slices and the upper limit. The right sum for x² from 0 to 2 sits above 8/3 and closes in as the slices thin.",
+    Component: lazy(() => import("./sims/riemann")),
+  },
+  {
+    id: "slope-field",
+    classId: 12,
+    subject: "maths",
+    chapter: 9,
+    title: "Slope Fields",
+    explore:
+      "Drag a starting point through a field of slopes. dy/dx = y grows like eˣ, dy/dx = 2x follows a parabola, and dy/dx = −x/y stays on a circle.",
+    Component: lazy(() => import("./sims/differential")),
+  },
+  {
+    id: "feasible-region",
+    classId: 12,
+    subject: "maths",
+    chapter: 12,
+    title: "Linear Programming",
+    explore:
+      "Drag a point inside the feasible polygon. 3x + 4y is largest at a corner, and an interior point never beats that vertex.",
+    Component: lazy(() => import("./sims/linear-programming")),
+  },
+  {
+    id: "bayes-bags",
+    classId: 12,
+    subject: "maths",
+    chapter: 13,
+    title: "Bayes’ Theorem",
+    explore:
+      "Drag red and blue balls between two bags, then say which colour you drew. The bag with more of that colour becomes the more likely source.",
+    Component: lazy(() => import("./sims/bayes")),
+  },
 ];
 
 export function getSim(id: string | undefined): SimEntry | undefined {
